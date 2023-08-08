@@ -1,29 +1,37 @@
 #include <cstddef>
+#include <cstdlib>
 #include <fstream>
 #include <string>
 #include <iostream>
 #include <dirent.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <proc/readproc.h>
 #include <algorithm>
+
 #include "process.h"
+#include "cpu.h"
+
 
 void print_proc_list();
 int print_stats(int pid);
 bool isNumber(const std::string& dir_name);
 
-using namespace std;
+using namespace Cpu;
 
 int main() {
     
     //print_proc_list();
-    int pid = 350786;
-    Process new_process = Process(pid);
-    std::cout << "Process " << pid << " CPU usage is " << new_process.getCpuUsage() << std::endl; 
+    //int pid = 350786;
+    //Process new_process = Process(pid);
+    //std::cout << "Process " << pid << " CPU usage is " << new_process.getCpuUsage() << std::endl; 
+    std::cout << "CPU Usage is: " << Cpu::get_load(1);
     return 0;
 }
 
-
+/**
+ * Test function
+ */
 void print_proc_list() {
     DIR* proc_dir = opendir("/proc"); 
     
@@ -44,6 +52,11 @@ void print_proc_list() {
     
     closedir(proc_dir);
 }
+
+/**
+ *
+ * Test function
+ */
 
 int print_stats(int pid) {
     std::string stat_filepath = "/proc/" + std::to_string(pid) + "/stat";

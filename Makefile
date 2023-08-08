@@ -12,8 +12,8 @@ TARGET = build/procmon
 
 all: $(TARGET)
 
-$(TARGET): main.cpp
-	$(CC) $(CFLAGS) -o $(TARGET) main.cpp process.cpp $(LDFLAGS)
+$(TARGET): src/main.cpp
+	$(CC) $(CFLAGS) -o $(TARGET) src/main.cpp src/process.cpp src/cpu.cpp $(LDFLAGS)
 
 clean:
 	rm -f $(TARGET)	

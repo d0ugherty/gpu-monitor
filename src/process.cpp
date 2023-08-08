@@ -1,3 +1,4 @@
+#include <sstream>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -31,9 +32,12 @@ double Process::getCpuUsage() {
  *
  */
 void Process::readStatFile(){
+    long utime, stime;
+
+    //get path for the stat file
     std::string stat_filepath = "/proc/" + std::to_string(pid) + "/stat";
     std::ifstream stat_file(stat_filepath);
-
+    //null check
     if(!stat_file) {
         std::cerr << "Failed to find stat file " << pid << std::endl;
         return;
@@ -42,6 +46,12 @@ void Process::readStatFile(){
     std::string line;
     std::getline(stat_file, line);
     stat_file.close();
-
-    std::sscanf(line.c_str(),"%*d %*s %*c %*d %*d %*d %*d %*d %*u %*u %*u %*u %*u %*u %ld %ld", &utime, &stime);
+    //parse file for utime and stime
+    std::istringstream iss(line);
+    
+    for(int i = 0; i < 14; i++){
+        long temp;
+        iss >> temp;
+    }
+    iss >> utime >> stime;
 }
