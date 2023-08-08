@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <proc/readproc.h>
 #include <algorithm>
+#include "process.h"
 
 void print_proc_list();
 int print_stats(int pid);
@@ -15,8 +16,10 @@ using namespace std;
 
 int main() {
     
-    print_proc_list();
-
+    //print_proc_list();
+    int pid = 350786;
+    Process new_process = Process(pid);
+    std::cout << "Process " << pid << " CPU usage is " << new_process.getCpuUsage() << std::endl; 
     return 0;
 }
 

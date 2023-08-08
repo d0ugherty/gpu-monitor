@@ -6,7 +6,7 @@
 class Process {
     public:
         Process(int pid);
-        double getCpuUsage(int pid);
+        double getCpuUsage();
         int getPid();
     private:
         int pid;
