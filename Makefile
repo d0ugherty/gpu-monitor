@@ -4,16 +4,16 @@
 #VARIABLES
 CC = gcc
 CFLAGS = -Wall -g
-LDFLAGS = -lstdc++
-TARGET = build/procmon
+LDFLAGS = -lstdc++ -lnvidia-ml
+TARGET = build/gpumon
 
 
 # RULES
 
 all: $(TARGET)
 
-$(TARGET): src/main.cpp
-	$(CC) $(CFLAGS) -o $(TARGET) src/main.cpp src/process.cpp src/cpu.cpp $(LDFLAGS)
+$(TARGET): main.cpp
+	$(CC) $(CFLAGS) -o $(TARGET) main.cpp cpu.cpp monitor.cpp $(LDFLAGS)
 
 clean:
 	rm -f $(TARGET)	
