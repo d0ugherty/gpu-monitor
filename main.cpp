@@ -20,13 +20,13 @@ int main() {
     
     struct device dev;
     dev.index = 0;
-
+    unsigned int count;
     result = nvmlDeviceGetHandleByIndex_v2(0, &dev.handle);
     nvmlDeviceGetName(dev.handle, dev.name, sizeof(dev.name));
-    
+    nvmlDeviceGetCount_v2(&count);
     std::cout << dev.name << std::endl;
-
-    std::cout << result << std::endl;
+        
+    std::cout << count << std::endl;
     return 0;
 }
 

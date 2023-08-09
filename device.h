@@ -1,15 +1,19 @@
+
+
 #include <nvml.h>
 #include <string>
 
 struct device {
+    public:
         unsigned int  index;
         nvmlDevice_t handle;
 
         nvmlPciInfo_t pci;
         nvmlMemory_t memory;
         nvmlUtilization_t utilization;
-
+        
         unsigned int temperature;
+
         unsigned int power_usage;
 
         nvmlClockType_t clock[NVML_CLOCK_COUNT], max_clock[NVML_CLOCK_COUNT];
@@ -21,6 +25,7 @@ struct device {
         char uuid[NVML_DEVICE_UUID_BUFFER_SIZE];
 
         unsigned int features;
+
 };
 
 enum feature {
