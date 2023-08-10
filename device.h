@@ -1,4 +1,5 @@
-
+#ifndef DEVICE_H
+#define DEVICE_H
 
 #include <nvml.h>
 #include <string>
@@ -17,6 +18,7 @@ struct device {
         unsigned int power_usage;
 
         nvmlClockType_t clock[NVML_CLOCK_COUNT], max_clock[NVML_CLOCK_COUNT];
+        unsigned int clock_speed;
 
         unsigned int fan_speed;
 
@@ -37,3 +39,5 @@ enum feature {
   FAN_INFO         = 1 << 5,  // Bit 5: 0010 0000
   UTILIZATION_INFO = 1 << 6   // Bit 6: 0100 0000
 };
+
+#endif
