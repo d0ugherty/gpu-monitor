@@ -1,3 +1,4 @@
+#include <iterator>
 #include <nvml.h>
 #include <iostream>
 #include <string>
@@ -15,6 +16,7 @@
 Monitor::Monitor() {
     nvmlReturn_t result;
     result = nvmlDeviceGetCount_v2(&this->device_count);
+    nvmlSystemGetDriverVersion(driver_version, std::size(driver_version));
     if (result == NVML_SUCCESS) {
         for(unsigned int i = 0; i < device_count; i++) {
             struct device dev;
@@ -93,6 +95,7 @@ void Monitor::display_info() {
  *
  */
 void Monitor::watch_info(int interval) {
+    std::cout << driver_version << "\n";
     while(true) {
         display_info();
         std::this_thread::sleep_for(std::chrono::seconds(interval)); 
