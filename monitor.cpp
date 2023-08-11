@@ -1,11 +1,9 @@
-#include <iterator>
 #include <nvml.h>
 #include <iostream>
 #include <string>
 #include <chrono>
 #include <thread>
 
-#define NVML_TRY(code) nvml_try(code, #code)
 #include "monitor.h"
 
 /**
@@ -16,7 +14,7 @@
 Monitor::Monitor() {
     nvmlReturn_t result;
     result = nvmlDeviceGetCount_v2(&this->device_count);
-    nvmlSystemGetDriverVersion(driver_version, std::size(driver_version));
+    nvml_try(__func__,nvmlSystemGetDriverVersion(driver_version, std::size(driver_version)));
     if (result == NVML_SUCCESS) {
         for(unsigned int i = 0; i < device_count; i++) {
             struct device dev;
@@ -31,7 +29,6 @@ Monitor::Monitor() {
  * Initialize the device information and add
  * device to the class' "devices" vector
  *
- * TO DO: Add error handling
  */
 void Monitor::initialize_device(struct device &dev, int index) {
     dev.index = index;
@@ -42,27 +39,28 @@ void Monitor::initialize_device(struct device &dev, int index) {
 /**
  * NVML API calls to retrieve device information
  *
- * TO DO: Figure out Clock info & error handling
+ * TO DO: Figure out Clock info
  * 
  */
 void Monitor::get_device_info(struct device &dev){
-    nvmlDeviceGetHandleByIndex_v2(dev.index, &dev.handle);
 
-    nvmlDeviceGetPciInfo_v3(dev.handle, &dev.pci);
+    nvml_try(__func__, nvmlDeviceGetHandleByIndex_v2(dev.index, &dev.handle));
 
-    nvmlDeviceGetMemoryInfo(dev.handle, &dev.memory);
+    nvml_try(__func__, nvmlDeviceGetPciInfo_v3(dev.handle, &dev.pci));
 
-    nvmlDeviceGetUtilizationRates(dev.handle, &dev.utilization);
-    nvmlDeviceGetTemperature(dev.handle, NVML_TEMPERATURE_GPU, &dev.temperature);
-    nvmlDeviceGetPowerUsage(dev.handle, &dev.power_usage);
+    nvml_try(__func__,nvmlDeviceGetMemoryInfo(dev.handle, &dev.memory));
 
-    nvmlDeviceGetClock(dev.handle, NVML_CLOCK_GRAPHICS, NVML_CLOCK_ID_CURRENT, &dev.clock_speed);
-//  nvmlDeviceGetClockInfo(dev.handle, NVML_CLOCK_SM, &dev.clock[NVML_CLOCK_SM]);
-    nvmlDeviceGetFanSpeed(dev.handle, &dev.fan_speed);
+    nvml_try(__func__,nvmlDeviceGetUtilizationRates(dev.handle, &dev.utilization));
+    nvml_try(__func__,nvmlDeviceGetTemperature(dev.handle, NVML_TEMPERATURE_GPU, &dev.temperature));
+    nvml_try(__func__,nvmlDeviceGetPowerUsage(dev.handle, &dev.power_usage));
 
-    nvmlDeviceGetName(dev.handle, dev.name, sizeof(dev.name));
-    nvmlDeviceGetSerial(dev.handle, dev.serial, sizeof(dev.serial));
-    nvmlDeviceGetUUID(dev.handle, dev.uuid, sizeof(dev.uuid));
+    nvml_try(__func__,nvmlDeviceGetClock(dev.handle, NVML_CLOCK_GRAPHICS, NVML_CLOCK_ID_CURRENT, &dev.clock_speed));
+//  nvmlDeviceGetClockInfo(__func__,dev.handle, NVML_CLOCK_SM, &dev.clock[NVML_CLOCK_SM]);
+    nvml_try(__func__,nvmlDeviceGetFanSpeed(dev.handle, &dev.fan_speed));
+
+    nvml_try(__func__,nvmlDeviceGetName(dev.handle, dev.name, sizeof(dev.name)));
+    nvml_try(__func__,nvmlDeviceGetSerial(dev.handle, dev.serial, sizeof(dev.serial)));
+    nvml_try(__func__,nvmlDeviceGetUUID(dev.handle, dev.uuid, sizeof(dev.uuid)));
 }
 
 /**
@@ -105,12 +103,10 @@ void Monitor::watch_info(int interval) {
 /**
  * Wrapper function for error handling instead of putting each
  * NVML call inside a try-catch block.
- *
- * TO DO: To implement this
  */
-static inline int nvml_try(std::string& functionName, nvmlReturn_t ret_value) {
+int Monitor::nvml_try(const char function_name[16], nvmlReturn_t ret_value) {
     if(ret_value != NVML_SUCCESS && ret_value != NVML_ERROR_TIMEOUT) {
-        std::cerr << "Error at " << functionName << " with return return value " << ret_value <<std::endl;
+        std::cerr << "Error at " << function_name << ": " << nvmlErrorString(ret_value) <<std::endl;
         return 1;
     }
     return 0;

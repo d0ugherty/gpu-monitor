@@ -16,6 +16,7 @@ public:
     void display_info();
     void watch_info(int interval);
 private:
+    int nvml_try(const char function_name[16], nvmlReturn_t ret_value);
     unsigned int device_count;
     char driver_version[128];
     std::vector<device> devices;
