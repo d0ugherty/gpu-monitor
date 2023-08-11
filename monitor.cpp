@@ -103,6 +103,8 @@ void Monitor::watch_info(int interval) {
 /**
  * Wrapper function for error handling instead of putting each
  * NVML call inside a try-catch block.
+ *
+ * TO DO: To implement this
  */
 int Monitor::nvml_try(const char function_name[16], nvmlReturn_t ret_value) {
     if(ret_value != NVML_SUCCESS && ret_value != NVML_ERROR_TIMEOUT) {
