@@ -1,4 +1,3 @@
-#include <iterator>
 #include <nvml.h>
 #include <iostream>
 #include <string>
@@ -106,7 +105,7 @@ void Monitor::watch_info(int interval) {
  * Wrapper function for error handling instead of putting each
  * NVML call inside a try-catch block.
  *
- * TO DO: To implement this
+ * TO DO: Figure out how to implement this with the corresponding macro
  */
 static inline int nvml_try(std::string& functionName, nvmlReturn_t ret_value) {
     if(ret_value != NVML_SUCCESS && ret_value != NVML_ERROR_TIMEOUT) {
