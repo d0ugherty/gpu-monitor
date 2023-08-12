@@ -12,15 +12,16 @@ class Monitor {
 public:
     Monitor();
     void get_device_info(struct device &dev);
-    void initialize_device(struct device &dev, int index); 
     void display_info();
     void watch_info(int interval);
 private:
-    int nvml_try(const char function_name[16], nvmlReturn_t ret_value);
+    void initialize_device(struct device &dev, int index); 
     unsigned int device_count;
     char driver_version[128];
     std::vector<device> devices;
     bool is_running;
+    int nvml_try(const char function_name[16], nvmlReturn_t ret_value);
+    void get_device_features(struct device &dev);
 };
 
 #endif

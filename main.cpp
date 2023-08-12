@@ -22,7 +22,7 @@ int main() {
     Monitor monitor = Monitor();
     monitor.display_info();
     std::cout << "\n";
-    monitor.watch_info(10);
+    monitor.watch_info(1);
     nvmlShutdown();
     return 0;
 }

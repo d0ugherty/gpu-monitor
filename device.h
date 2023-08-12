@@ -12,7 +12,8 @@ struct device {
         nvmlPciInfo_t pci;
         nvmlMemory_t memory;
         nvmlUtilization_t utilization;
-        
+        nvmlComputeMode_t mode;
+
         unsigned int temperature;
 
         unsigned int power_usage;
