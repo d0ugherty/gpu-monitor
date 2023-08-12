@@ -9,7 +9,11 @@
 #include <math.h>
 
 
-double Cpu::get_load(unsigned interval_sec){
+Cpu::Cpu() {
+    utilization = set_load(2);
+}
+
+double Cpu::set_load(unsigned interval_sec){
     long cpu_time_1, cpu_time_2;
 
     cpu_time_1 = get_cpu_time();
@@ -28,6 +32,14 @@ double Cpu::get_load(unsigned interval_sec){
     double total_time = interval_sec * 100;
     double utilization =  delta / total_time;
     
+    return utilization;
+}
+
+/**
+ * Return current utilization of CPU 
+ * 
+ */
+double Cpu::get_load(){
     return utilization;
 }
     

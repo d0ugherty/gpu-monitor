@@ -2,7 +2,7 @@
 #include <iostream>
 #include "cpu.h"
 #include <nvml.h>
-#include "device.h"
+#include "gpu.h"
 #include "monitor.h"
 
 void print_proc_list();

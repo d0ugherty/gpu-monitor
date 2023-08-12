@@ -4,29 +4,30 @@
 #include <chrono>
 #include <thread>
 
-#include "device.h"
+#include "nvml_try.h"
+#include "gpu.h"
 #include "monitor.h"
 
 /**
- * TO-DO: Add feature check
+ * TO-DO: CPU information
  *
- *
+ * Might refactor this and divide it between GPU & CPU
  */
-Monitor::Monitor() {
+Monitor::Monitor(){
     nvml_try(__func__,nvmlDeviceGetCount_v2(&this->device_count));
-    nvml_try(__func__,nvmlSystemGetDriverVersion(driver_version, std::size(driver_version)));
+    NVML_TRY(__func__,nvmlSystemGetDriverVersion(driver_version, std::size(driver_version)));
     for(unsigned int i = 0; i < device_count; i++) {
-        struct device dev;
+        struct gpu dev;
         initialize_device(dev,i);
     } 
 }
 
 /**
- * Initialize the device information and add
+ * Initialize the GPU information and add
  * device to the class' "devices" vector
  *
  */
-void Monitor::initialize_device(struct device &dev, int index) {
+void Monitor::initialize_device(struct gpu &dev, int index) {
     dev.index = index;
     nvml_try(__func__,nvmlDeviceGetHandleByIndex_v2(dev.index, &dev.handle));
     get_device_features(dev);
@@ -35,10 +36,10 @@ void Monitor::initialize_device(struct device &dev, int index) {
 }
 
 /**
- * Check for supported features
+ * Check for supported GPU features
  *
  */
-void Monitor::get_device_features(struct device &dev) {
+void Monitor::get_device_features(struct gpu &dev) {
     
     if(nvmlDeviceGetMemoryInfo(dev.handle, &dev.memory) == NVML_SUCCESS) {
         dev.features |= MEMORY_INFO;
@@ -71,12 +72,12 @@ void Monitor::get_device_features(struct device &dev) {
 
 
 /**
- * NVML API calls to retrieve device information
+ * NVML API calls to retrieve GPU  information
  *
  * TO DO: Figure out Clock info
  * 
  */
-void Monitor::get_device_info(struct device &dev){
+void Monitor::get_device_info(struct gpu &dev){
     nvml_try(__func__, nvmlDeviceGetPciInfo_v3(dev.handle, &dev.pci));
 
     if(dev.features & MEMORY_INFO) {
@@ -97,7 +98,6 @@ void Monitor::get_device_info(struct device &dev){
 
     if(dev.features & CLOCK_INFO) {
         nvml_try(__func__,nvmlDeviceGetClock(dev.handle, NVML_CLOCK_GRAPHICS, NVML_CLOCK_ID_CURRENT, &dev.clock_speed));
-//  nvmlDeviceGetClockInfo(__func__,dev.handle, NVML_CLOCK_SM, &dev.clock[NVML_CLOCK_SM]);
     }  
     
     if(dev.features & FAN_INFO) {
@@ -152,17 +152,4 @@ void Monitor::watch_info(int interval) {
     }
 }
 
-/**
- * Wrapper function for error handling instead of putting each
- * NVML call inside a try-catch block.
- *
- * INPUT: calling function name, NVML API return enum
- * OUTPUT: 1 (FAIL) 0 (SUCCESS)
- */
-int Monitor::nvml_try(const char function_name[16], nvmlReturn_t ret_value) {
-    if(ret_value != NVML_SUCCESS && ret_value != NVML_ERROR_TIMEOUT) {
-        std::cerr << "Error at " << function_name << ": " << nvmlErrorString(ret_value) <<std::endl;
-        return 1;
-    }
-    return 0;
-}
+
