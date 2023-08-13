@@ -36,7 +36,7 @@ void Monitor::initialize_device(struct gpu &dev, int index) {
 }
 
 /**
- * Check for supported GPU features
+ * Check  for supported GPU features
  *
  */
 void Monitor::get_device_features(struct gpu &dev) {
