@@ -21,8 +21,11 @@ int main() {
 
 
     std::cout << "\n";
-    Monitor _monitor = Monitor();
-    _monitor.watch_info(1);
+    //Monitor _monitor = Monitor();
+    //_monitor.watch_info(1);
+    Monitor* mon = Monitor::getInstance();
+    mon->watch_info(1);
+    
     nvmlShutdown();
     return 0;
 }

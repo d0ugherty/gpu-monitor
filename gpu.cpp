@@ -103,12 +103,15 @@ void Gpu::set_device_info(){
  * TO DO: GUI
 */
 void Gpu::display_info(){
-    std::cout << this->name << "    Driver Version: " << driver_version << "\n";
-    std::cout << "TEMPERATURE: " << this->temperature << "C\n";
+    std::cout << this->name << "            Driver Version: " << driver_version << "\n";
+    std::cout << "TEMPERATURE: " << this->temperature << "C                     POWER USAGE: " << this->power_usage <<"mW\n\n";
+    std::cout << "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
     std::cout << "POWER USAGE: " << this->power_usage <<"mW\n";
-    std::cout << "LOAD: " << this->utilization.gpu << "       Memory: " << this->utilization.memory;
-    std::cout << "CLOCK SPEED: " << this->clock_speed << "MHz";
-    std::cout << "FAN SPEED: " << this->fan_speed << " of Max\n";
+    std::cout << "LOAD: " << this->utilization.gpu << "%                        Memory: " << this->utilization.memory << "%\n\n";
+    std::cout << "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
+    std::cout << "CLOCK SPEED: " << this->clock_speed << "MHz\n";
+    std::cout << "FAN SPEED: " << this->fan_speed << "% of Max\n\n";
+    std::cout << "===================================================================\n\n";
 }
 
 /**
