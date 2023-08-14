@@ -11,8 +11,6 @@
 
 /**
  * TO-DO: CPU information
- *
- * Might refactor this and divide it between GPU & CPU
  */
 
 Monitor* Monitor::mon_ = NULL;
