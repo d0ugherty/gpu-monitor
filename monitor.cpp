@@ -14,6 +14,9 @@
  *
  * Might refactor this and divide it between GPU & CPU
  */
+
+Monitor* Monitor::mon_ = NULL;
+
 Monitor::Monitor(){
     //initialize GPUs
     nvmlDeviceGetCount_v2(&this->device_count);
@@ -23,6 +26,13 @@ Monitor::Monitor(){
     } 
 
     //initialize CPU
+}
+
+Monitor* Monitor::getInstance(){
+    if(mon_ == NULL){
+        mon_ = new Monitor();
+    }
+    return(mon_);
 }
 
 /**

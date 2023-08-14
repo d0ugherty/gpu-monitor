@@ -17,14 +17,17 @@
 */
 class Monitor {
 public:
-    Monitor();
     void display_info();
     void watch_info(int interval);
+    static Monitor* getInstance();
 private:
     unsigned int device_count;
     std::vector<Gpu> devices;
+    static Monitor* mon_;
+
+    Monitor();
+    Monitor(const Monitor&);
+    Monitor& operator=(const Monitor&);
 };
-
-
 
 #endif
