@@ -11,7 +11,6 @@
 
 /**
  * TO-DO: CPU information
- *
  */
 
 Monitor* Monitor::mon_ = NULL;
