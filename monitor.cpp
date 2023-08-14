@@ -4,7 +4,7 @@
 #include <chrono>
 #include <thread>
 
-#include "nvml_try.h"
+#include "error.h"
 #include "gpu.h"
 #include "cpu.h"
 #include "monitor.h"
@@ -12,14 +12,13 @@
 /**
  * TO-DO: CPU information
  *
- * Might refactor this and divide it between GPU & CPU
  */
 
 Monitor* Monitor::mon_ = NULL;
 
 Monitor::Monitor(){
     //initialize GPUs
-    nvmlDeviceGetCount_v2(&this->device_count);
+    NVML_TRY(nvmlDeviceGetCount_v2(&this->device_count));
     for(unsigned int index = 0; index < device_count; index++) {
         struct Gpu device = Gpu(index);
         devices.push_back(device);
@@ -41,9 +40,9 @@ Monitor* Monitor::getInstance(){
  * would like to implement a GUI at some point
  */
 void Monitor::display_info() {
-
+    //GPU information
     for(unsigned int i = 0; i < device_count; i++) {
-        devices[i].watch_info(1);
+        devices[i].display_info();
     }
 
 }

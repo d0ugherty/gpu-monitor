@@ -1,7 +1,6 @@
 #ifndef MONITOR_H
 #define MONITOR_H
 
-//#define NVML_TRY(func, ret_value) nvml_try(__func__, ret_value)
 #include <nvml.h>
 #include <string>
 #include <vector>
@@ -21,7 +20,7 @@ public:
     void watch_info(int interval);
     static Monitor* getInstance();
 private:
-    unsigned int device_count;
+    unsigned int device_count;;
     std::vector<Gpu> devices;
     static Monitor* mon_;
 

@@ -4,6 +4,8 @@
 #include <nvml.h>
 #include <string>
 
+#include "nvml.h"
+
 
 /**
  * At compile time, structs in C++ are treated as classes. I would have made

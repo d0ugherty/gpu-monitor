@@ -6,7 +6,7 @@
 #include <thread>
 
 #include "gpu.h"
-//#include "nvml_try.h"
+#include "error.h"
 
 Gpu::Gpu(unsigned int index){
     initialize_device(index);
@@ -15,11 +15,12 @@ Gpu::Gpu(unsigned int index){
 
 void Gpu::initialize_device(unsigned int index){
     this->index = index;
-    nvmlDeviceGetHandleByIndex_v2(index, &this->handle);
+    NVML_TRY(nvmlDeviceGetHandleByIndex_v2(index, &this->handle));
 
-    nvmlDeviceGetName(this->handle, this->name, sizeof(this->name));
-    nvmlDeviceGetSerial(this->handle, this->serial, sizeof(this->serial));
-    nvmlDeviceGetUUID(this->handle, this->uuid, sizeof(this->uuid));
+    NVML_TRY(nvmlDeviceGetName(this->handle, this->name, sizeof(this->name)));
+    NVML_TRY(nvmlDeviceGetSerial(this->handle, this->serial, sizeof(this->serial)));
+    NVML_TRY(nvmlDeviceGetUUID(this->handle, this->uuid, sizeof(this->uuid)));
+    NVML_TRY(nvmlSystemGetDriverVersion(this->driver_version, sizeof(driver_version)));
 
     set_device_features();
     set_device_info();
@@ -65,35 +66,35 @@ void Gpu::set_device_features(){
 */
 
 void Gpu::set_device_info(){
-    nvmlDeviceGetPciInfo_v3(this->handle, &this->pci);
+    NVML_TRY(nvmlDeviceGetPciInfo_v3(this->handle, &this->pci));
 
     if(this->features & MEMORY_INFO) {
-        nvmlDeviceGetMemoryInfo(this->handle, &this->memory);
+        NVML_TRY(nvmlDeviceGetMemoryInfo(this->handle, &this->memory));
     }
 
     if(this->features & UTILIZATION_INFO){
-        nvmlDeviceGetUtilizationRates(this->handle, &this->utilization);
+        NVML_TRY(nvmlDeviceGetUtilizationRates(this->handle, &this->utilization));
     }
 
     if(this->features & TEMPERATURE){
-        nvmlDeviceGetTemperature(this->handle,NVML_TEMPERATURE_GPU, &this->temperature);
+        NVML_TRY(nvmlDeviceGetTemperature(this->handle,NVML_TEMPERATURE_GPU, &this->temperature));
     }
     
     if(this->features & POWER_USAGE) {
-        nvmlDeviceGetPowerUsage(this->handle, &this->power_usage);
+        NVML_TRY(nvmlDeviceGetPowerUsage(this->handle, &this->power_usage));
     }
     
     if(this->features & CLOCK_INFO){
         //nvmlDeviceGetClock(this->handle, NVML_CLOCK_GRAPHICS, NVML_CLOCK_ID_CURRENT, &this->clock_speed);
-        nvmlDeviceGetClockInfo(this->handle, NVML_CLOCK_GRAPHICS, &this->clock_speed);
+        NVML_TRY(nvmlDeviceGetClockInfo(this->handle, NVML_CLOCK_GRAPHICS, &this->clock_speed));
     }
 
     if(this->features & FAN_INFO){
-        nvmlDeviceGetFanSpeed(this->handle, &this->fan_speed);
+        NVML_TRY(nvmlDeviceGetFanSpeed(this->handle, &this->fan_speed));
     }
 
     if(this->features & COMPUTE_MODE){
-        nvmlDeviceGetComputeMode(this->handle, &this->mode);
+        NVML_TRY(nvmlDeviceGetComputeMode(this->handle, &this->mode));
     }
 }
 
@@ -103,12 +104,12 @@ void Gpu::set_device_info(){
  * TO DO: GUI
 */
 void Gpu::display_info(){
-    std::cout << this->name << "            Driver Version: " << driver_version << "\n";
-    std::cout << "TEMPERATURE: " << this->temperature << "C                     POWER USAGE: " << this->power_usage <<"mW\n\n";
-    std::cout << "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
+    std::cout << "DEVICE: " << this->name << "            Driver Version: " << driver_version << "\n";
+    std::cout << "\nTEMPERATURE: " << this->temperature << "C                     POWER USAGE: " << this->power_usage <<"mW\n\n";
+    std::cout << "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
     std::cout << "POWER USAGE: " << this->power_usage <<"mW\n";
-    std::cout << "LOAD: " << this->utilization.gpu << "%                        Memory: " << this->utilization.memory << "%\n\n";
-    std::cout << "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
+    std::cout << "UTILIZATION: " << this->utilization.gpu << "%                        Memory: " << this->utilization.memory << "%\n\n";
+    std::cout << "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
     std::cout << "CLOCK SPEED: " << this->clock_speed << "MHz\n";
     std::cout << "FAN SPEED: " << this->fan_speed << "% of Max\n\n";
     std::cout << "===================================================================\n\n";
