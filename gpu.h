@@ -14,14 +14,11 @@
 struct Gpu {
 public:
     Gpu(unsigned int index);
-    char name[NVML_DEVICE_NAME_BUFFER_SIZE];
-    char serial[NVML_DEVICE_SERIAL_BUFFER_SIZE];
-    char uuid[NVML_DEVICE_UUID_BUFFER_SIZE];
     void display_info();
     void watch_info(unsigned int interval);
 
 private:
-    unsigned int  index;
+    unsigned int index;
     nvmlDevice_t handle;
 
     nvmlPciInfo_t pci;
@@ -37,6 +34,10 @@ private:
     unsigned int fan_speed;
     unsigned int features;
     char driver_version[128];
+
+    char name[NVML_DEVICE_NAME_BUFFER_SIZE];
+    char serial[NVML_DEVICE_SERIAL_BUFFER_SIZE];
+    char uuid[NVML_DEVICE_UUID_BUFFER_SIZE];
 
     void initialize_device(unsigned int index);
     void set_device_features();

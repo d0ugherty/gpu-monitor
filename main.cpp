@@ -2,6 +2,7 @@
 #include <iostream>
 #include "cpu.h"
 #include <nvml.h>
+
 #include "gpu.h"
 #include "monitor.h"
 
@@ -10,7 +11,6 @@ int print_stats(int pid);
 bool isNumber(const std::string& dir_name);
 
 int main() {
-    bool running = true;
     nvmlReturn_t result;
     result = nvmlInitWithFlags(NVML_INIT_FLAG_NO_GPUS);
 
@@ -19,10 +19,10 @@ int main() {
         return 1;
     }
 
-    Monitor monitor = Monitor();
-    monitor.display_info();
+
     std::cout << "\n";
-    monitor.watch_info(1);
+    Monitor _monitor = Monitor();
+    _monitor.watch_info(1);
     nvmlShutdown();
     return 0;
 }

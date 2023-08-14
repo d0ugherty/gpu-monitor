@@ -6,22 +6,25 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <memory>
+
 #include "gpu.h"
 
+/**
+ * Singleton design to ensure only one instance of the 
+ * Monitor is active at any given time
+ * 
+*/
 class Monitor {
 public:
     Monitor();
-    void get_device_info(struct gpu &dev);
     void display_info();
     void watch_info(int interval);
 private:
-    void initialize_device(struct gpu &dev, int index); 
     unsigned int device_count;
-    char driver_version[128];
-    std::vector<gpu> devices;
-    bool is_running;
-    int nvml_try(const char function_name[16], nvmlReturn_t ret_value);
-    void get_device_features(struct gpu &dev);
+    std::vector<Gpu> devices;
 };
+
+
 
 #endif

@@ -13,7 +13,7 @@ TARGET = build/gpumon
 all: $(TARGET)
 
 $(TARGET): main.cpp
-	$(CC) $(CFLAGS) -o $(TARGET) main.cpp cpu.cpp monitor.cpp $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $(TARGET) main.cpp cpu.cpp monitor.cpp gpu.cpp $(LDFLAGS)
 
 clean:
 	rm -f $(TARGET)	

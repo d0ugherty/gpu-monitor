@@ -6,7 +6,7 @@
 #include <thread>
 
 #include "gpu.h"
-#include "nvml_try.h"
+//#include "nvml_try.h"
 
 Gpu::Gpu(unsigned int index){
     initialize_device(index);
@@ -16,6 +16,11 @@ Gpu::Gpu(unsigned int index){
 void Gpu::initialize_device(unsigned int index){
     this->index = index;
     nvmlDeviceGetHandleByIndex_v2(index, &this->handle);
+
+    nvmlDeviceGetName(this->handle, this->name, sizeof(this->name));
+    nvmlDeviceGetSerial(this->handle, this->serial, sizeof(this->serial));
+    nvmlDeviceGetUUID(this->handle, this->uuid, sizeof(this->uuid));
+
     set_device_features();
     set_device_info();
 }
@@ -62,10 +67,6 @@ void Gpu::set_device_features(){
 void Gpu::set_device_info(){
     nvmlDeviceGetPciInfo_v3(this->handle, &this->pci);
 
-    nvmlDeviceGetName(this->handle, this->name, sizeof(this->name));
-    nvmlDeviceGetSerial(this->handle, this->serial, sizeof(this->serial));
-    nvmlDeviceGetUUID(this->handle, this->uuid, sizeof(this->uuid));
-
     if(this->features & MEMORY_INFO) {
         nvmlDeviceGetMemoryInfo(this->handle, &this->memory);
     }
@@ -102,7 +103,7 @@ void Gpu::set_device_info(){
  * TO DO: GUI
 */
 void Gpu::display_info(){
-    std::cout << this->name << "    Driver Version: " << driver_version;
+    std::cout << this->name << "    Driver Version: " << driver_version << "\n";
     std::cout << "TEMPERATURE: " << this->temperature << "C\n";
     std::cout << "POWER USAGE: " << this->power_usage <<"mW\n";
     std::cout << "LOAD: " << this->utilization.gpu << "       Memory: " << this->utilization.memory;
@@ -121,6 +122,7 @@ void Gpu::display_info(){
  */
 void Gpu::watch_info(unsigned int interval){
     while(true) {
+        set_device_info();    
         display_info();
         std::this_thread::sleep_for(std::chrono::seconds(interval));
     }
