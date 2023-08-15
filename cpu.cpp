@@ -10,7 +10,7 @@
 
 
 Cpu::Cpu() {
-    utilization = set_load(2);
+    utilization = set_load(1);
 }
 
 double Cpu::set_load(unsigned interval_sec){

@@ -3,8 +3,8 @@
 
 #VARIABLES
 CC = gcc
-CFLAGS = -Wall -g
-LDFLAGS = -lstdc++ -lnvidia-ml
+CFLAGS = -Wall -g 
+LDFLAGS = -lstdc++ -lnvidia-ml -L/usr/share/doc/libimgui-dev
 TARGET = build/gpumon
 
 
