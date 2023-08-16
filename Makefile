@@ -10,7 +10,7 @@ CXXFLAGS += -g -Wall -Wformat
 
 CXXFLAGS = -std=c++11 -lstdc++ -lnvidia-ml -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends
 
-SOURCES = main.cpp cpu.cpp monitor.cpp gpu.cpp
+SOURCES = main.cpp cpu.cpp monitor.cpp gpu.cpp gui.cpp
 SOURCES += $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_demo.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp $(IMGUI_DIR)/imgui_widgets.cpp
 SOURCES += $(IMGUI_DIR)/backends/imgui_impl_sdl2.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp 
 
