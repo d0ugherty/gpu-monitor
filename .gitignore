@@ -34,6 +34,8 @@
 
 
 #etc
+*.core
+*.txt
 lib
 gpumon
 .vscode

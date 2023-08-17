@@ -1,6 +1,6 @@
 #include "gui.h"
 
-static void render(ImGuiIO &io,ImVec4 &clear_color, SDL_Window* &window);
+static void render(ImGuiIO io,ImVec4 clear_color, SDL_Window* window);
 static void show_window(bool show_demo_window, bool show_another_window, ImVec4 clear_color, ImGuiIO& io);
 static void start_frame();
 static void handle_event(bool &done, SDL_Window* &window);
@@ -197,7 +197,7 @@ static void show_window(bool show_demo_window, bool show_another_window, ImVec4 
 }
 
 //Render function for main loop
-static void render(ImGuiIO &io,ImVec4 &clear_color, SDL_Window* &window){
+static void render(ImGuiIO io,ImVec4 clear_color, SDL_Window* window){
     // Rendering
     ImGui::Render();
     glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
