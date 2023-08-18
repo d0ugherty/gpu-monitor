@@ -132,3 +132,38 @@ void Gpu::watch_info(unsigned int interval){
     }
 }
 
+std::string Gpu::get_name(){
+    return this->name;
+}
+
+std::string Gpu::get_driver_version(){
+   return this->driver_version;
+}
+
+int Gpu::get_temperature(){
+    return this->temperature;
+}
+
+int Gpu::get_power_usage(){
+    return this->power_usage;
+}
+
+
+/**
+ * Returns tuple containing the two utilzation fields
+ * 0 - GPU utilization - percent over time which one or more kernels were executing on the GPU 
+ * 1 - Global device memory utilization
+ */
+std::tuple<unsigned int, unsigned int> Gpu::get_utilization(){
+    // percent over time in which one or more of the kernels were executing on the GPU
+    std::tuple<unsigned int, unsigned int> result (this->utilization.gpu, this->utilization.memory);
+    return result;
+}
+
+int Gpu::get_fan_speed(){
+    return this->fan_speed;
+}
+
+int Gpu::get_clock_speed(){
+    return this->clock_speed;
+}

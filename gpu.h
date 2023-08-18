@@ -3,6 +3,7 @@
 
 #include <nvml.h>
 #include <string>
+#include <vector>
 
 #include "nvml.h"
 
@@ -18,6 +19,18 @@ public:
     Gpu(unsigned int index);
     void display_info();
     void watch_info(unsigned int interval);
+    std::string info_string();
+   
+    std::string get_name();
+    std::string get_driver_version();
+
+    int get_power_usage();
+    int get_temperature();
+    std::tuple<unsigned int, unsigned int> get_utilization();
+    int get_fan_speed();
+    int get_clock_speed();
+
+
 
 private:
     unsigned int index;
