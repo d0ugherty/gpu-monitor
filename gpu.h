@@ -21,15 +21,20 @@ public:
     void watch_info(unsigned int interval);
     std::string info_string();
    
-    std::string get_name();
+    const char* get_name();
     std::string get_driver_version();
+
+    std::vector<unsigned int> get_device_info();
 
     int get_power_usage();
     int get_temperature();
     std::tuple<unsigned int, unsigned int> get_utilization();
+    nvmlMemory_t get_memory_info();
+
     int get_fan_speed();
     int get_clock_speed();
-
+    
+    void set_device_info();
 
 
 private:
@@ -54,9 +59,7 @@ private:
     char serial[NVML_DEVICE_SERIAL_BUFFER_SIZE];
     char uuid[NVML_DEVICE_UUID_BUFFER_SIZE];
 
-    void initialize_device(unsigned int index);
-    void set_device_features();
-    void set_device_info();    
+    void set_device_features();    
 };
 
 enum feature {

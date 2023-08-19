@@ -9,11 +9,6 @@
 #include "error.h"
 
 Gpu::Gpu(unsigned int index){
-    initialize_device(index);
-}
-
-
-void Gpu::initialize_device(unsigned int index){
     this->index = index;
     NVML_TRY(nvmlDeviceGetHandleByIndex_v2(index, &this->handle));
 
@@ -26,7 +21,7 @@ void Gpu::initialize_device(unsigned int index){
     set_device_info();
 }
 /**
- * Feature check using bitwise operations
+ * Feature check
  * 
 */
 void Gpu::set_device_features(){
@@ -128,11 +123,43 @@ void Gpu::watch_info(unsigned int interval){
     while(true) {
         set_device_info();    
         display_info();
-        std::this_thread::sleep_for(std::chrono::seconds(interval));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
 }
 
-std::string Gpu::get_name(){
+/**
+ *  Returns a vector containing the current device state 
+ * 
+ *  0 = TEMPERATURE
+ *  1 = POWER USAGE
+ *  2 = GPU UTILIZATION
+ *  3 = GPU MEMORY UTILIZATION
+ *  4 = CLOCK SPEED
+ *  5 = FAN SPEED
+*/
+std::vector<unsigned int> Gpu::get_device_info(){
+    std::vector<unsigned int> result;
+    result.push_back(this->temperature);
+    result.push_back(this->power_usage);
+    
+    if(this->features & UTILIZATION_INFO){
+        NVML_TRY(nvmlDeviceGetUtilizationRates(this->handle, &this->utilization));
+    
+        result.push_back(this->utilization.gpu);
+        result.push_back(this->utilization.memory);
+    }
+
+    if(this->features & CLOCK_INFO){
+        //nvmlDeviceGetClock(this->handle, NVML_CLOCK_GRAPHICS, NVML_CLOCK_ID_CURRENT, &this->clock_speed);
+        NVML_TRY(nvmlDeviceGetClockInfo(this->handle, NVML_CLOCK_GRAPHICS, &this->clock_speed));
+        result.push_back(this->clock_speed);
+    }
+    
+    result.push_back(this->fan_speed);
+    return result;
+}
+
+const char* Gpu::get_name(){
     return this->name;
 }
 
@@ -158,6 +185,10 @@ std::tuple<unsigned int, unsigned int> Gpu::get_utilization(){
     // percent over time in which one or more of the kernels were executing on the GPU
     std::tuple<unsigned int, unsigned int> result (this->utilization.gpu, this->utilization.memory);
     return result;
+}
+
+nvmlMemory_t Gpu::get_memory_info(){
+     return this->memory;
 }
 
 int Gpu::get_fan_speed(){

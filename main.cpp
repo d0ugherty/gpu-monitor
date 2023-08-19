@@ -26,9 +26,15 @@ int main() {
     NVML_TRY(nvmlInitWithFlags(NVML_INIT_FLAG_NO_GPUS));
     std::cout << "\n";
 
-     //imgui init
-    Gui gui = Gui("dark");
+
+    Gpu gpu_dev = Gpu(0);
+   
+    Gui gui = Gui("dark", gpu_dev);
+    //Cpu cpu = Cpu();
+
+    //imgui init
     gui.run();
+    
     gui.shutdown();
 
     nvmlShutdown();

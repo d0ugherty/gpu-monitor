@@ -12,16 +12,18 @@
 #include <SDL2/SDL_opengl.h>
 #endif
 
+#include "gpu.h"
+
 class Gui {
 public:
-    Gui(const std::string style);
+    Gui(const std::string style, Gpu &device);
     void run();
     void shutdown();
 private:
     SDL_WindowFlags window_flags;
     SDL_Window* window;
     SDL_GLContext gl_context;
-
+    Gpu &device;
     ImGuiIO io;
     ///state 
     bool show_demo_window;
