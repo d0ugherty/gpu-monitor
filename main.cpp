@@ -18,10 +18,6 @@
 #include "gui.h"
 #include "error.h"
 
-void print_proc_list();
-int print_stats(int pid);
-
-
 int main() {
     NVML_TRY(nvmlInitWithFlags(NVML_INIT_FLAG_NO_GPUS));
     std::cout << "\n";
